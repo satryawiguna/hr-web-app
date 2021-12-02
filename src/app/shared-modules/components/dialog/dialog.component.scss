@@ -1,0 +1,102 @@
+$grey: #bebebeff;
+$light-blue: #5ba5d3;
+$light-green:#74e597;
+$light-red:#ff6e84;
+
+.mat-dialog-title {
+  overflow: auto;
+  h1 {
+    font-size: 22px;
+    color:$light-blue;
+    text-decoration: underline;
+    float: left;
+  }
+  .btn-close {
+    float: right;
+    padding: 0;
+    margin: 0;
+  }
+  .mat-button {
+    min-width: 34px;
+  }
+}
+.mat-dialog-content {
+  padding: 0 50px;
+}
+.mat-dialog-actions {
+  button {
+    width: 35%;
+    text-align: center;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mat-raised-button {
+  background-color:$light-blue;
+  color: $grey;
+}
+
+.mat-stroked-button {
+  border-color:$light-blue;
+  color:$light-blue;
+}
+
+:host ::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+.detail:nth-child(even) {
+  background-color: white;
+}
+.detail:nth-child(odd) {
+  background-color: $grey;
+}
+.detail:hover {
+  background-color: $grey;
+}
+.detail {
+  th {
+    width: 100px;
+    text-align: right;
+    padding-right: 10px;
+  }
+  td {
+    width: 300px;
+  }
+}
+
+#status.mat-stroked-button {
+  line-height: 24px;
+  font-size: 10px;
+  border-radius: 20px;
+}
+#status.mat-icon {
+  font-size: inherit;
+  width: inherit;
+  height: inherit;
+}
+#status.active-btn {
+  color: $light-green;
+  border-color: $light-green;
+}
+
+#status.nonactive-btn {
+  color: $light-red;
+  border-color: $light-red;
+}
+
+.hideInput {
+  display: none;
+}
+
+textarea.mat-input-element.cdk-textarea-autosize {
+  line-height: 1.5em;
+}
+
+table{
+  td{
+    border-bottom: 1px solid $grey;
+  }
+}

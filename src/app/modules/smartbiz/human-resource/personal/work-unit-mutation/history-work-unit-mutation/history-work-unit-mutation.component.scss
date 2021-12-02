@@ -1,0 +1,31 @@
+@use '../../../../../../shared-modules/base/pages/add/add.scss';
+
+
+:root {
+  --history-modal-width: 500px;
+  --history-modal-height: 500px;
+}
+
+button {
+  margin: 5px;
+}
+
+/* MODAL STYLES
+-------------------------------*/
+:host {
+  .modal-body {
+    height: calc(var(--history-modal-height) + 50px);
+    width: var(--history-modal-width);
+    .modal-form {
+      height: calc(var(--history-modal-height) - 150px);
+    }
+  }
+}
+
+.history-modal-background {
+  @extend .modal-background;
+}
+
+.modal-title{
+  padding-left: 25px;
+}

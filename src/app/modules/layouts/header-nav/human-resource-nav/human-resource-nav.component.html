@@ -1,0 +1,116 @@
+<!-- desktop -->
+<div style="width: 100%;" class="menu-bar" fxShow fxHide.sm fxHide.xs>
+  <mat-toolbar color="primary">
+    <ng-container *ngFor="let item of model.human_resource_navigation">
+      <ng-container *ngIf="item.child == null">
+        <button mat-button routerLink="{{item.url}}">
+          {{item.name}}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="item.child != null">
+        <button style="z-index:0" mat-button #buttonTrigger="matMenuTrigger"
+          (mouseenter)="menubar.buttonEnter(buttonTrigger)" (mouseleave)="menubar.buttonLeave(buttonTrigger)"
+          [matMenuTriggerFor]="menu.childMenu" *ngIf="item.url == null" href="javascript:;">
+          {{item.name}}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <button style="z-index:0" mat-button #buttonTrigger="matMenuTrigger"
+          (mouseenter)="menubar.buttonEnter(buttonTrigger)" (mouseleave)="menubar.buttonLeave(buttonTrigger)"
+          [matMenuTriggerFor]="menu.childMenu" *ngIf="item.url != null" routerLink="{{item.url}}">
+          {{item.name}}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+
+        <app-menu-item #menu [items]="item.child" [parent]="item" [roles]="roles" class="child"></app-menu-item>
+      </ng-container>
+    </ng-container>
+  </mat-toolbar>
+</div>
+
+<!-- mobile -->
+<div style="width: 100%" fxHide fxShow.xs fxShow.sm>
+  <mat-sidenav-container class="sidenav-mobile app-inner" fxFlexFill>
+    <mat-sidenav class="sidenav" fxFlexFill position="end" #sidenav fixedInViewport="true" [mode]="(sidebar.isHandset | async) ? 'over' :
+        'side'" [attr.role]="sidebar.isHandset ? 'dialog' : 'navigation'" [opened]="!(sidebar.isHandset | async)">
+      <div fxLayout="column" class="header-sidenav">
+        <div class="overlay-header"></div>
+        <div fxLayout="row" style="z-index: 2;">
+          <div fxAlignItems="flex-start" fxLayout="column" fxLayoutGap="10px">
+            <img class="profile-picture" src="./assets/app/media/img/users/user4.jpg">
+            <span style="font-size: 20px; color: #ffffff">
+              Welcome, {{user.username | titlecase}}
+            </span>
+          </div>
+          <span class="example-spacer"></span>
+          <div fxAlignItems="flex-end" fxLayout="row" fxLayoutGap="10px">
+            <button mat-mini-fab color="primary" [matMenuTriggerFor]="settings">
+              <mat-icon>settings</mat-icon>
+            </button>
+            <mat-menu #settings="matMenu" overlapTrigger="false" class="profile-menu">
+              <button mat-menu-item color="primary">
+                <mat-icon>person</mat-icon>
+                <span>My Profile</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>settings</mat-icon>
+                <span>Settings</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="signOut()">
+                <mat-icon>input</mat-icon>
+                <span>Logout</span>
+              </button>
+            </mat-menu>
+            <button mat-mini-fab color="primary" (click)="sidebar.sidenav.toggle()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <mat-accordion>
+        <ng-container *ngFor="let item of model.human_resource_navigation">
+          <ng-container *ngIf="item.child == null">
+            <mat-expansion-panel disabled hideToggle class="mat-elevation-z0 sidenav-menu">
+              <mat-expansion-panel-header routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()"
+                class="sidenav-menu-title" collapsedHeight="50px" expandedHeight="50px">
+                <mat-panel-title>
+                  {{item.name}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>
+          </ng-container>
+          <ng-container *ngIf="item.child != null">
+            <div *ngIf="item.url == null">
+              <mat-expansion-panel class="mat-elevation-z0 sidenav-menu" #menunav>
+                <mat-expansion-panel-header class="sidenav-menu-title" collapsedHeight="50px" expandedHeight="50px">
+                  <mat-panel-title href="javascript:;">
+                    {{item.name}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-menu-item #menu [items]="item.child" [parent]="item" [roles]="roles" class="child" padding="32">
+                </app-menu-item>
+              </mat-expansion-panel>
+            </div>
+
+            <div *ngIf="item.url != null">
+              <mat-expansion-panel class="mat-elevation-z0 sidenav-menu" #menunav>
+                <mat-expansion-panel-header class="sidenav-menu-title" collapsedHeight="50px" expandedHeight="50px">
+                  <mat-panel-title routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()">
+                    {{item.name}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-menu-item #menu [items]="item.child" [parent]="item" [roles]="roles" class="child" padding="32">
+                </app-menu-item>
+              </mat-expansion-panel>
+            </div>
+          </ng-container>
+        </ng-container>
+      </mat-accordion>
+    </mat-sidenav>
+  </mat-sidenav-container>
+</div>
+
+<div class="page-content" fxShow>
+  <router-outlet></router-outlet>
+</div>

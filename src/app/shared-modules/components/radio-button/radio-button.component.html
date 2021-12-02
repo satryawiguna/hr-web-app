@@ -1,0 +1,11 @@
+<div [formGroup]="formName" fxLayout="column" fxLayoutGap="10px">
+    <label id="radio-group-label">{{label | titlecase}}</label>
+    <mat-radio-group
+        aria-labelledby="radio-group-label"
+        fxLayout="{{display}}" fxLayoutGap="10px"
+        [formControlName]="name">
+        <mat-radio-button class="example-radio-button" *ngFor="let option of options" [value]="option.id">
+            {{option.label || option.name}}
+        </mat-radio-button>
+    </mat-radio-group>
+</div>

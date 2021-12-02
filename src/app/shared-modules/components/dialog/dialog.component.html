@@ -1,0 +1,84 @@
+<div mat-dialog-title>
+  <h1>{{data.title || '' | titlecase}}</h1>
+  <button mat-icon-button [mat-dialog-close]="false" type="button" class="btn-close">
+    <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content>
+
+  <div [ngSwitch]="data.type">
+
+    <div *ngSwitchCase="'detail'">
+      <form>
+        <ng-container *ngFor="let detail of data.detail">
+          <ng-container [ngSwitch]="true">
+            <ng-container *ngSwitchCase="detail[0] === 'is_active'">
+              <mat-form-field>
+                <mat-label>{{'status' | titlecase }}</mat-label>
+                <input matInput readonly value=" " class="hideInput">
+                <button id='status' mat-stroked-button class="{{detail[1] ? 'active-btn' : 'nonactive-btn'}}" disabled>
+                  <mat-icon>{{detail[1] ? 'done' : 'close'}}</mat-icon>
+                  {{detail[1] ? 'Active' : 'Non Active'}}
+                </button>
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="detail[0] === 'description'">
+              <mat-form-field>
+                <mat-label>{{(detail[0]).split('_').join(' ') | titlecase }}</mat-label>
+                <textarea matInput readonly cdkTextareaAutosize cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="20">{{detail[1] || '-'}}</textarea>
+              </mat-form-field>
+            </ng-container>
+
+            <!-- show extra detail in permission & role component -->
+            <ng-container *ngSwitchCase="['permission', 'access'].includes(detail[0])">
+              <mat-form-field>
+                <mat-label>{{(detail[0]).split('_').join(' ') | titlecase }}</mat-label>
+                <ng-container *ngIf="detail[1]|async as details;else empty">
+                  <table style="width: 80%; border-collapse: collapse;">
+                    <ng-container *ngFor="let detail of details">
+                      <tr>
+                        <td style="width: 80%">
+                          <textarea matInput readonly cdkTextareaAutosize cdkAutosizeMinRows="1"
+                            cdkAutosizeMaxRows="20">{{detail.name}}</textarea>
+                        </td>
+                        <td>
+                          <input matInput readonly value="{{detail.value}}" />
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </table>
+                </ng-container>
+                <ng-template #empty>
+                  <input matInput readonly value="-">
+                </ng-template>
+              </mat-form-field>
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              <mat-form-field>
+                <mat-label>{{(detail[0]).split('_').join(' ') | titlecase }}</mat-label>
+                <input matInput readonly value="{{detail[1] || '-'}}">
+              </mat-form-field>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </form>
+    </div>
+
+    <div *ngSwitchCase="'waiting'">
+    </div>
+
+    <div *ngSwitchDefault>
+      <p>
+        {{ data.body || '' }}</p>
+    </div>
+  </div>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="primary" [mat-dialog-close]="false"
+    cdkFocusInitial>{{data.btnNo || 'Close' | titlecase}}</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial
+    *ngIf="data.btnYes">{{data.btnYes | titlecase}}</button>
+</div>

@@ -1,0 +1,35 @@
+.filters-header {
+  .title-filter {
+    font-size: 22px;
+    margin-top: 5px;
+    float: left;
+    text-decoration: underline;
+    color: #5ba5d3;
+  }
+  .btn-filter {
+    float: right;
+    color: #5ba5d3;
+  }
+}
+.filters-content {
+  margin-top: 15px;
+  width: 100%;
+}
+.filters-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    width: 35%;
+    text-align: center;
+  }
+}
+
+.mat-raised-button:not([disabled]).mat-primary:hover {
+  background-color: #5ba5d3;
+}
+
+.mat-stroked-button {
+  border-color: #5ba5d3;
+  color: #5ba5d3;
+}

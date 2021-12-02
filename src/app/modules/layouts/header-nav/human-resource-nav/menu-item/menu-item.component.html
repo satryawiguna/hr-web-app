@@ -1,0 +1,72 @@
+<!-- desktop -->
+<mat-menu #childMenu="matMenu" overlapTrigger="false" fxShow fxHide.xs fxHide.sm [hasBackdrop]="false">
+    <ng-container *ngFor="let item of items">
+        <ng-container *ngIf="item.child == null">
+            <button mat-menu-item routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()"
+                (mouseenter)="menubar.menuenter(false)" (mouseleave)="menubar.menuLeave()">
+                <!-- <mat-icon>{{item.icon}}</mat-icon> -->
+                {{item.name}}
+            </button>
+        </ng-container>
+        <ng-container *ngIf="item.child != null">
+            <button #nextTrigger="matMenuTrigger" mat-menu-item routerLink="{{item.url}}"
+                (mouseenter)="menubar.menuenter(true)" (mouseleave)="menubar.menuLeave(nextTrigger)"
+                [matMenuTriggerFor]="menu.childMenu">
+                <!-- <mat-icon>{{item.icon}}</mat-icon> -->
+                {{item.name}}
+            </button>
+            <app-menu-item #menu [items]="item.child" [parent]="parent" [roles]="roles"></app-menu-item>
+        </ng-container>
+    </ng-container>
+</mat-menu>
+
+<!-- mobile -->
+<!-- <mat-accordion fxHide fxShow.xs fxShow.sm>
+    <ng-container *ngFor="let item of items">
+        <ng-container *ngIf="item.child == null && (parent.role.includes(model.user_information.roles[0].slug)
+            || parent.role.includes('*'))">
+            <mat-expansion-panel class="mat-elevation-z0 sidenav-menu {{class}}" hideToggle disabled>
+                <mat-expansion-panel-header routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()" collapsedHeight="50px" expandedHeight="50px" class="sidenav-menu-title">
+                    <mat-panel-title>
+                        {{item.name}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+            </mat-expansion-panel>
+        </ng-container>
+        <ng-container *ngIf="item.child != null && (parent.role.includes(model.user_information.roles[0].slug)
+            || parent.role.includes('*'))">
+            <mat-expansion-panel class="mat-elevation-z0 sidenav-menu {{class}}">
+                <mat-expansion-panel-header collapsedHeight="50px" expandedHeight="50px" class="sidenav-menu-title">
+                    <mat-panel-title routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()">
+                        {{item.name}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <app-menu-item #menu [items]="item.child" [parent]="parent" [model]="model" class="childs-child"></app-menu-item>
+            </mat-expansion-panel>
+        </ng-container>
+    </ng-container>
+</mat-accordion> -->
+<mat-selection-list fxHide fxShow.xs fxShow.sm>
+    <ng-container *ngFor="let item of items">
+        <ng-container *ngIf="item.child == null">
+            <mat-list-option routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()" class="{{class}}"
+                [ngStyle]="{'padding': padding_style}">
+                {{item.name}}
+            </mat-list-option>
+        </ng-container>
+        <ng-container *ngIf="item.child != null">
+            <mat-accordion>
+                <mat-expansion-panel class="mat-elevation-z0 {{class}}">
+                    <mat-expansion-panel-header class="mat-elevation-z0" collapsedHeight="50px" expandedHeight="50px"
+                        [ngStyle]="{'padding': padding_has_child_style}">
+                        <mat-panel-title routerLink="{{item.url}}" (click)="sidebar.sidenav.toggle()">
+                            {{item.name}}
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-menu-item #menu [items]="item.child" [parent]="parent" [roles]="roles" class="childs-child"
+                        padding="{{convertToInt(padding) + convertToInt(32)}}"></app-menu-item>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </ng-container>
+    </ng-container>
+</mat-selection-list>

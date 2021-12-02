@@ -1,0 +1,34 @@
+<mat-sidenav-container (backdropClick)="filter_nav.toggle()">
+
+  <mat-sidenav #filters [autoFocus]="false" position="end" class="filters-container" fxFlex="400px" fxFlex.sm="100%"
+    fxFlex.xs="100%">
+    <app-filter-sidebar [filter]="filter" [filterNav]='filter_nav'>
+      <app-input-text name='query' [formName]='filter' label='Search'></app-input-text>
+      <app-select-api *ngIf='isSuperAdmin' name="company_id" [formName]="filter" label='company'>
+      </app-select-api>
+      <app-select-api name="employee_id" [formName]="filter" label='employee'></app-select-api>
+      <app-select-api name="degree_id" [formName]="filter" label='Degree'></app-select-api>
+      <app-select-api name="major_id" [formName]="filter" label='Major'></app-select-api>
+      <app-input-date name="date" [formName]="filter" label='Date'></app-input-date>
+    </app-filter-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container">
+      <mat-card class="card-header mat-elevation-z0">
+        <h2>Formal Education History List</h2>
+      </mat-card>
+      <mat-card class="card-content mat-elevation-z0">
+        <app-datatable [columns]="columns" [service]="_service" [filter]="filter" [returnUrl]='returnUrl'
+          datatable-state='{{componentName}}' (openModal)="modal($event)" [filterNav]="filter_nav">
+        </app-datatable>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<app-add-formal-education-history *ngIf="modalControl[0] === 'add'" (closeModal)='modal($event)'
+  datatable-state='{{componentName}}'>
+</app-add-formal-education-history>
+<app-edit-formal-education-history *ngIf="modalControl[0] === 'edit'" [data]="modalControl[1]"
+  (closeModal)='modal($event)' datatable-state='{{componentName}}'>
+</app-edit-formal-education-history>

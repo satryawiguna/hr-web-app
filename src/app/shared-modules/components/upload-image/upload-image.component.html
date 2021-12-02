@@ -1,0 +1,179 @@
+<div fxLayout="column" fxLayoutGap="10px" style="margin-top: 10px;">
+    <mat-label style="color: #808080;">{{label | titlecase}}</mat-label>
+    <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="cursor: pointer; border: 1px dashed #808080; padding: 10px; color: #808080;" (click)="showMainDialog()">
+        <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="10px" *ngIf="!hasSelected; else showPreview">
+            <mat-icon style="font-size: 32px;">camera_alt</mat-icon>
+            <div>Select image, or drag from gallery</div>
+            <div>(.jpg or .png, dimension size 1:1, max-size 1mb)</div>
+        </div>
+        <ng-template #showPreview>
+            <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="10px">
+                <img width="75%" height="75%" [src]="selectedSrc">
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<ng-template #mainDialog>
+    <div class="container" fxLayout="column">
+        <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
+            <h2 fxLayoutAlign="start">Media Library</h2>
+            <button mat-icon-button (click)="close()" type="button" class="btn-close">
+                <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+            </button>
+        </div>
+        <div mat-dialog-content fxLayout="column" style="min-height: 67vh;">
+            <!-- filter bar -->
+            <div fxLayout="row" fxLayoutGap="10px">
+                <mat-accordion #fileTypePanel="matAccordion" [multi]="true">
+                    <mat-expansion-panel hideToggle="true" class="mat-elevation-z0" style="margin-top: 1px; position: absolute; z-index: 999;">
+                        <mat-expansion-panel-header collapsedHeight="30px" expandedHeight="30px">
+                            <mat-panel-title>
+                                {{typeShow | titlecase}}
+                            </mat-panel-title>
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                        </mat-expansion-panel-header>
+                        <mat-selection-list>
+                            <ng-container *ngFor="let item of typeSrc">
+                                <ng-container *ngIf="typeShow != item">
+                                    <mat-divider></mat-divider>
+                                    <mat-list-option (click)="setFileType(item); fileTypePanel.closeAll();">
+                                        {{item | titlecase}}
+                                    </mat-list-option>
+                                </ng-container>
+                            </ng-container>
+                        </mat-selection-list>
+                    </mat-expansion-panel>
+                </mat-accordion>
+    
+                <mat-accordion #collectionPanel="matAccordion" [multi]="true">
+                    <mat-expansion-panel hideToggle="true" style=" margin-left: 110px; margin-top: 1px; position: absolute; z-index: 999;" class="mat-elevation-z0">
+                        <mat-expansion-panel-header collapsedHeight="30px" expandedHeight="30px">
+                            <mat-panel-title>
+                                {{collectionShow | titlecase}}
+                            </mat-panel-title>
+                            <mat-icon>keyboard_arrow_down</mat-icon>
+                        </mat-expansion-panel-header>
+                        <mat-selection-list>
+                            <ng-container *ngFor="let item of collectionSrc">
+                                <ng-container *ngIf="collectionShow != item">
+                                    <mat-divider></mat-divider>
+                                    <mat-list-option (click)="setCollection(item); collectionPanel.closeAll();">
+                                        {{item | titlecase}}
+                                    </mat-list-option>
+                                </ng-container>
+                            </ng-container>
+                        </mat-selection-list>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+            
+            <div *ngIf="!files.length"
+                (dragover)="showDropzone()"
+                fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px" style="color: #808080; font-size: 18px; margin: auto; position: relative;"
+            >
+                <div>
+                    <mat-icon style="font-size: 72px; width: 72px;">camera_alt</mat-icon>
+                </div>
+                <div>Drag or drop files here</div>
+                <div>(.jpg or .png, dimension size 1:1, max-size 1mb)</div>
+            </div>
+
+            <div *ngIf="files.length" fxLayout="row wrap" fxLayout.xs="column wrap" fxLayoutGap="10px" class="file-list">
+                <mat-card *ngFor="let file of files; let i = index"
+                    (click)="file.percentDone == 100 || !file.percentDone ? imageClicked(i) : ''"
+                    class="mat-elevation-z0 image-list" fxFlex="15" style="color: #808080;">
+                    <mat-card-content [ngClass]="(i == selectedImageId ? 'image-selected' : '')" fxLayout="column" fxLayoutAlign="center center" style="cursor: pointer">
+                        <div *ngIf="file.hasOwnProperty('thumbnail'); else noThumb" class="container-img">
+                            <img [src]="file.thumbnail">
+                            <div class="selected-overlay"></div>
+                            <div class="action-overlay" *ngIf="file.percentDone == 100 || !file.percentDone" fxLayout="column" fxLayoutAlign="center center">
+                                <div fxLayout="row">
+                                    <button mat-icon-button aria-label="preview" class="action-preview" style="width: 22px;">
+                                        <mat-icon (click)="previewImage($event, i)" style="font-size: 20px; width: 20px;">search</mat-icon>
+                                    </button>
+                                    <button mat-icon-button aria-label="delete" class="action-delete" style="width: 22px;">
+                                        <mat-icon (click)="deleteImage($event, i)" style="font-size: 20px; width: 20px;">delete</mat-icon>
+                                    </button>
+                                </div>
+                                <div style="font-size: 12px; text-align: center; max-width: 80px; word-wrap: break-word;">{{truncFileName(file.name || file.original_file)}}</div>
+                            </div>
+                        </div>
+                        <ng-template #noThumb>
+                            <div>
+                                <mat-icon style="font-size: 128px; width: 128px;">photo</mat-icon>
+                                <div class="loading-overlay" *ngIf="file.percentDone < 100" fxLayoutAlign="center center" fxLayout="column" style="padding: 1em;">
+                                    <mat-progress-bar mode="determinate" [value]="file.percentDone"></mat-progress-bar>
+                                    <span>{{file.percentDone}} %</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px">
+            <input type="file" #fileInput id="fileInput" multiple="{{multiple ? 'multiple' : ''}}" (change)="fileBrowseHandler($event)" style="display:none"/>
+            <button mat-raised-button color="primary" type="button" [disabled]="!files.length || selectedImageId == -1" (click)="selectFile()">
+                Select
+            </button>
+            <button mat-stroked-button color="primary" type="button" (click)="openFilePicker()">
+                Upload File
+            </button>
+            <!-- <button mat-raised-button color="primary" type="button" [disabled]="selectedImageId == -1 || uploading" (click)="doUpload()">
+                Select
+                <mat-progress-bar mode="indeterminate" *ngIf="uploading"></mat-progress-bar>
+            </button> -->
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #dropzone>
+    <div class="container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="min-height: 85vh; background-color: black; border: 2px solid #5ba5d3;">
+        <div
+            (drop)="onFileDropped($event)"
+            (dragleave)="dismissDropzone()" 
+            fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px" style="color: #808080; font-size: 18px; position: relative; width: 100%; height: 100%;"
+        >
+            <input type="file" #fileDropRef id="fileDropRef" multiple="{{multiple ? 'multiple' : ''}}" />
+            <div class="info" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" style="margin: auto; color: #ffffff;">
+                <mat-icon>add</mat-icon>
+                <h3>Drop files to upload</h3>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #preview>
+    <div fxLayout="column" fxLayoutGap="25px" style="color: #ffffff">
+        <div fxLayoutAlign="space-between">
+            <span fxLayoutAlign="start"></span>
+            <button mat-icon-button fxLayoutAlign="end" class="btn-close" (click)="closePreview()">
+                <mat-icon aria-hidden="false" aria-label="close" style="font-size: 32px; width: 32px;">close</mat-icon>
+            </button>
+        </div>
+        <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="20px">
+            <img class="responsive" [src]="previewSrc">
+            {{fileName}}
+        </div>
+    </div>
+</ng-template>
+  
+<ng-template #confirmDelete>
+    <div class="container" fxLayout="column" fxLayoutGap="20px">
+        <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
+            <h1 fxLayoutAlign="start">Delete File</h1>
+            <button mat-icon-button class="btn-close" fxLayoutAlign="end" (click)="closePreview()">
+                <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+            </button>
+        </div>
+        <div mat-dialog-content>
+            Are you sure you want to delete {{fileName}} file ?
+        </div>
+        <div mat-dialog-actions fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="end">
+            <button mat-stroked-button color="primary" cdkFocusInitial (click)="closePreview()">Cancel</button>
+            <button mat-raised-button color="primary" cdkFocusInitial (click)="doDelete(indexDelete)">Delete</button>
+        </div>
+    </div>
+</ng-template>

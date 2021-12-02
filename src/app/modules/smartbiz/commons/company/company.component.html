@@ -1,0 +1,32 @@
+<mat-sidenav-container (backdropClick)="filter_nav.toggle()">
+  <mat-sidenav #filters [autoFocus]="false" position="end" class="filters-container" fxFlex="400px" fxFlex.sm="100%"
+    fxFlex.xs="100%">
+    <app-filter-sidebar [filter]="filter" [filterNav]='filter_nav'>
+      <app-input-text name='query' [formName]='filter' label='Search'></app-input-text>
+      <app-select-instant name='is_active' [formName]='filter' [options]='statusOptions$ | async' label='Status'>
+      </app-select-instant>
+      <app-select-instant name='company_category_id' [formName]='filter' [options]='companyCategoryOptions$ | async'
+        label='Company Category'></app-select-instant>
+      <app-select-instant name='employee_number_scale_id' [formName]='filter'
+        [options]='employeeNumberScaleOptions$ | async' label='Employee Number Scale'></app-select-instant>
+    </app-filter-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container">
+      <mat-card class="card-header mat-elevation-z0">
+        <h2>Company List</h2>
+      </mat-card>
+      <mat-card class="card-content mat-elevation-z0">
+        <app-datatable [columns]="columns" [service]="_service" [filter]="filter" [returnUrl]='returnUrl'
+          datatable-state='{{componentName}}' (openModal)="modal($event)" [filterNav]="filter_nav">
+        </app-datatable>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<app-add-company *ngIf="modalControl[0] === 'add'" (closeModal)='modal($event)' datatable-state='{{componentName}}'>
+</app-add-company>
+<app-edit-company [data]="modalControl[1]" [hidden]="modalControl[0] !== 'edit'" (closeModal)='modal($event)'
+  datatable-state='{{componentName}}'>
+</app-edit-company>

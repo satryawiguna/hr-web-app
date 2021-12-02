@@ -1,0 +1,111 @@
+<!-- desktop -->
+<div style="width: 100%;" class="main-header">
+    <mat-toolbar class="mat-elevation-z8" color="primary">
+        <span class="example-spacer" fxLayout="row">
+            <img fxShow fxHide.xs fxHide.sm alt="" src="./assets/logo/sb-logo-white.png" width="200px" height="100px"/>
+            <img fxHide fxShow.xs fxShow.sm alt="" src="./assets/logo/sb-logo-white.png" width="100px" height="65px"/>
+            <!-- <h1 class="header-app-title">SmartBiz</h1> -->
+            <button mat-button>
+                <mat-icon>notifications</mat-icon>
+            </button>
+        </span>
+        
+        <span class="example-spacer"></span>
+    
+        <button mat-button fxHide fxShow.sm fxShow.xs [matMenuTriggerFor]="menu">
+            <mat-icon>view_comfy</mat-icon>
+        </button>
+        <button mat-button fxHide fxShow.sm fxShow.xs (click)="sidebar.sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <!-- <button mat-button fxHide fxShow.sm fxShow.xs (click)="showToolbar =! showToolbar">
+            <mat-icon>more_horiz</mat-icon>
+        </button> -->
+    
+        <div fxHide.xs fxHide.sm>
+            <span style="font-size: 15px;">
+                Welcome, {{user.username | titlecase}} 
+                <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">arrow_drop_down</mat-icon> -->
+            </span>
+            <button mat-button>
+                <img class="profile-picture" src="./assets/app/media/img/users/user4.jpg"> 
+            </button>
+            <button mat-button #buttonTrigger="matMenuTrigger" [matMenuTriggerFor]="menu" fxHide.sm fxHide.xs>
+                <mat-icon>view_comfy</mat-icon>
+            </button>
+            <button mat-button #buttonTrigger="matMenuTrigger" [matMenuTriggerFor]="settings" fxHide.sm fxHide.xs>
+                <mat-icon>settings</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar>
+</div>
+
+<!-- mobile -->
+<!-- <div style="width: 100%;" fxHide fxShow.xs fxShow.sm *ngIf="showToolbar" class='toolbar-mobile' [@slideInOut]>
+    <mat-toolbar color="primary">
+        <span class="example-spacer"></span>
+        <span style="font-size: 15px;">
+            Welcome, {{user.username | titlecase}} 
+        </span>
+        <button mat-button>
+            <img class="profile-picture" src="./assets/app/media/img/users/user4.jpg"> 
+        </button>
+        <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>view_comfy</mat-icon>
+        </button>
+        <button mat-button [matMenuTriggerFor]="settings">
+            <mat-icon>settings</mat-icon>
+        </button>
+    </mat-toolbar>
+</div> -->
+
+<mat-menu #menu="matMenu" overlapTrigger="false">
+    <div fxLayout="row" fxLayoutWrap class="app-switch">
+        <div fxFlex="33%" fxFlexAlign="center center">
+            <button mat-button color="primary">
+                <mat-icon class="app-list">person</mat-icon>
+                <br>
+                <span class="app-name">App 1</span>
+            </button>
+        </div>
+        <div fxFlex="33%" fxFlexAlign="center center">
+            <button mat-button color="primary">
+                <mat-icon class="app-list">book</mat-icon>
+                <br>
+                <span class="app-name">App 2</span>
+            </button>
+        </div>
+        <div fxFlex="33%" fxFlexAlign="center center">
+            <button mat-button color="primary">
+                <mat-icon class="app-list">language</mat-icon>
+                <br>
+                <span class="app-name">App 3</span>
+            </button>
+        </div>
+    </div>
+</mat-menu>
+
+<mat-menu #settings="matMenu" overlapTrigger="false" class="profile-menu">
+    <!-- <div class="profile-toolbar">
+        <p class='profile-name'><strong>{{user.username}}</strong></p>
+        <p>{{user.role[0].name}}</p>
+        <p>0361234567</p>
+        <p>admin@gmail.com</p>
+    </div> -->
+    <!-- <mat-divider></mat-divider> -->
+    <button mat-menu-item color="primary">
+        <mat-icon>person</mat-icon>
+        <span>My Profile</span>
+    </button>
+    <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="signOut()">
+        <mat-icon>input</mat-icon>
+        <span>Logout</span>
+    </button>
+</mat-menu>
+
+<app-human-resource-nav></app-human-resource-nav>

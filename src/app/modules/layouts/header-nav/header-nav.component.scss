@@ -1,0 +1,202 @@
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .main-header{
+        height: 56px;
+    }
+}
+
+.main-header{
+    position: fixed;
+    // position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 0; /* Sets the sticky toolbar to be on top */
+    height: 64px;
+    z-index: 4; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+.toolbar-mobile{
+    position: sticky;
+    z-index: 3;
+    margin-top: 56px;
+    top: 56px;
+    // top: 1;
+    // margin-top: 60px;
+}
+
+.header-app-title{
+    font-size: 44px;
+    font-family: 'Passion One';
+}
+
+.app-switch{
+    width: 100%;
+    .app-list{
+        font-size: 35px;
+    }
+    .app-name{
+        margin-top: 1vh;
+        margin-left: 1vw;
+    }
+}
+
+.position-fixed{
+    position: fixed;
+    z-index: 1 !important;
+}
+
+.toolbar-mobile.slide-down{
+    -webkit-animation:0.5s slide-down normal forwards;
+    animation:0.5s slide-down normal forwards;
+}
+.toolbar-mobile.slide-up{
+    -webkit-animation:0.5s slide-up normal forwards;
+    animation:0.5s slide-up normal forwards;
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slide-up
+{
+  0%   {top:80%;}
+  100%  {top:0;}
+}
+
+/* Standard syntax */
+@keyframes slide-up
+{
+  0%   {top:80%;}
+  100%  {top:0;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slide-down
+{
+  0%  {top:0;}
+  100%   {top:80%;}
+}
+
+/* Standard syntax */
+@keyframes slide-down
+{
+  0%  {top:0;}
+  100%   {top:80%;}
+}
+
+mat-sidenav {
+    width: 250px;
+    box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
+}
+
+.app-inner {
+    height: 100%;
+}
+
+mat-sidenav-content {
+    overflow-y: hidden;
+    height: 100vh;
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+mat-sidenav .material-icons {
+    font-size: 20px;
+    padding: 0 !important;
+}
+
+a.menu-item {
+    color: #454545;
+    font-size: 14px;
+}
+
+.page {
+    padding: 0px;
+    top: 64px;
+    max-height: calc(100vh - 64px);
+    overflow-y: scroll;
+    .page-content {
+        padding: 20px;
+    }
+}
+
+a.active {
+    border-right: thick solid #01579b;
+    color: #01579b;
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mat-list,
+.mat-nav-list {
+    padding-top: 0 !important;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.mat-toolbar {
+    .menu-button {
+        height: 100%;
+        width: auto;
+    }
+}
+
+mat-progress-bar {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    height: 3px;
+}
+
+.mat-toolbar.side-toolbar {
+// background-color: #FFFFFF;
+}
+
+.profile-picture {
+    border: 2px solid #FFFFFF;
+    width: 40px;
+    height: 40px;
+    // margin-right: 5px;
+    background-size: cover;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.profile-toolbar {
+    width: 200px; 
+    padding: 20px;
+    border-bottom: thin solid #EFEFEF;
+    vertical-align: middle;
+    p{
+        font-size: 12px;
+        color: #01579b;
+        margin: 5px 0;
+    }
+    .profile-name{
+        // margin: 10px 0;
+        font-size: 14px;
+    }
+}
+
+mat-list-text.mat-list-text {
+    padding-left: 5px !important;
+}
+
+.mat-menu-item {
+    font-size: 12px;
+}
+
+.main-header {}

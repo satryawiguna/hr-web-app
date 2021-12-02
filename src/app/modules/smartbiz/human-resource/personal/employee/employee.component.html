@@ -1,0 +1,113 @@
+<mat-sidenav-container (backdropClick)="filter_nav.toggle()">
+
+  <mat-sidenav #filters [autoFocus]="false" position="end" class="filters-container" fxFlex="500px" fxFlex.sm="100">
+    <app-filter-sidebar [filter]="filter" [filterNav]='filter_nav'>
+
+      <div fxLayout="row wrap" fxFlex="100" fxLayoutAlign="space-around center">
+        <div fxFlex="95">
+          <app-input-text name='query' [formName]='filter' label='Search'></app-input-text>
+        </div>
+        <div fxFlex="95" *ngIf='isSuperAdmin'>
+          <app-select-api name="company_id" [formName]="filter" label='company'></app-select-api>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='gender_id' [formName]='filter' [options]="options$.gender$ | async" label='gender'>
+          </app-select-instant>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='marital_status_id' [formName]='filter' [options]="options$.maritalStatus$ | async"
+            label='Marital Status'>
+          </app-select-instant>
+        </div>
+
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-input-date-range name='join_date_range' [formName]='filter' label='Join Date'></app-input-date-range>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-input-date-range name='birth_date_range' [formName]='filter' label='Birth Date'></app-input-date-range>
+        </div>
+
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-checkbox name='has_bpjs' [formName]='filter' label='has BPJS'>
+          </app-checkbox>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='degree_id' [formName]='filter' [options]='options$.degree$ | async' label='degree'>
+          </app-select-instant>
+        </div>
+
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='major_id' [formName]='filter' [options]='options$.major$ | async' label='major'>
+          </app-select-instant>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-api name='project_id' [formName]='filter' label='project'></app-select-api>
+        </div>
+
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-api name='competence_id' [formName]='filter' label='competence'></app-select-api>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-api name='position_id' [formName]='filter' label='position'></app-select-api>
+        </div>
+
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='office_id' [formName]='filter' [options]='options$.office$ | async' label='office'>
+          </app-select-instant>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='work_status' [formName]='filter' [options]='options$.workStatus$ | async'
+            label='work status'>
+          </app-select-instant>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95">
+          <app-select-instant name='work_unit_id' [formName]='filter' [options]='options$.workUnit$ | async'
+            label='work unit'>
+          </app-select-instant>
+        </div>
+        <div fxFlex="45" fxFlex.sm="95"></div>
+      </div>
+
+    </app-filter-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container">
+      <mat-card class="card-header mat-elevation-z0">
+        <h2>Employee List</h2>
+      </mat-card>
+      <mat-card class="card-content mat-elevation-z0">
+        <app-datatable [columns]="columns" [service]="_service" [filter]="filter" [returnUrl]='returnUrl'
+          datatable-state='{{componentName}}' (openModal)="modal($event)" [filterNav]="filter_nav">
+        </app-datatable>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- ? init with delayedInit add-employee-component -->
+<!-- ? pros : faster init & remember last tab choise -->
+<!-- ? cons : information selection is not selected for first time open -->
+<!-- <app-add-employee [hidden]="modalControl[0] !== 'add'" *ngIf="delayedInit" (closeModal)='modal($event)'
+  datatable-state='{{componentName}}' width="95vw" height="90vh">
+</app-add-employee> -->
+
+<!-- ? init with delayedInit edit-employee-component -->
+<!-- ? pros : faster init & remember last tab choise -->
+<!-- ? cons : information selection is not selected for first time open -->
+<app-edit-employee [hidden]="modalControl[0] !== 'edit'" [data]="modalControl[1]" *ngIf="delayedInit"
+  (closeModal)='modal($event)' datatable-state='{{componentName}}' width="95vw" height="90vh">
+</app-edit-employee>
+
+<!-- ? init with ngif add-employee-component -->
+<!-- ? pros: information selection is not selected for first time open -->
+<!-- ? cons: slower init & remember last tab choise -->
+<app-add-employee *ngIf="modalControl[0] === 'add'" (closeModal)='modal($event)' datatable-state='{{componentName}}'
+  width="95vw" height="90vh">
+</app-add-employee>
+
+<!-- ? init with ngif edit-employee-component -->
+<!-- ? pros: information selection is not selected for first time open -->
+<!-- ? cons: slower init & remember last tab choise -->
+<!-- <app-edit-employee *ngIf="modalControl[0] === 'edit'" [data]="modalControl[1]" (closeModal)='modal($event)'
+  datatable-state='{{componentName}}' width="95vw" height="90vh">
+</app-edit-employee> -->

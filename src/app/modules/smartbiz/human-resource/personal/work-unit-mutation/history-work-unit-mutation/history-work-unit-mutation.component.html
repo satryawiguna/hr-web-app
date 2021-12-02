@@ -1,0 +1,22 @@
+<div class="history-modal-background">
+    <div class="modal-body">
+        <div class="modal-top">
+            <h2 class="modal-title">{{componentName.split('-').join(' ') | titlecase}} History</h2>
+            <button mat-icon-button (click)="cancel()" type="button" class="btn-close">
+                <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+            </button>
+        </div>
+        <mat-progress-bar mode="indeterminate" *ngIf="isSubmitted"></mat-progress-bar>
+    
+        <div class="modal-form">
+            <app-datatable [columns]="columns" [service]="_service" datatable-state='{{componentName}}'
+            (openModal)="modal($event)" hide-filter-button hide-export-button>
+            </app-datatable>
+        </div>
+    </div>
+</div>
+
+<app-add-work-unit-mutation *ngIf="modalControl[0] === 'add'" (closeModal)='modal($event)'
+datatable-state='{{componentName}}'></app-add-work-unit-mutation>
+<app-edit-work-unit-mutation *ngIf="modalControl[0] === 'edit'" [data]="modalControl[1]" (closeModal)='modal($event)'
+datatable-state='{{componentName}}'></app-edit-work-unit-mutation>

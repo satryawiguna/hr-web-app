@@ -1,0 +1,16 @@
+<div [formGroup]="formName">
+    <!-- <mat-label>{{ignoreLabelCase ? (label) : (label | titlecase)}}</mat-label>
+    <international-phone-number class="mystyle form-control form-control-sm" [defaultCountry]="'id'" formControlName="{{name}}" name="phone_number"></international-phone-number> -->
+    
+    <mat-form-field appearance="{{appearance}}">
+        <mat-label>{{ignoreLabelCase ? (label) : (label | titlecase)}}</mat-label>
+        <ngx-mat-intl-tel-input
+        [preferredCountries]="['id']"
+        [enableSearch]="true"
+        formControlName="{{name}}"
+        name="phone" #phone></ngx-mat-intl-tel-input>
+    </mat-form-field>
+    <mat-error>
+        <app-control-messages [control]="formName.get(name)"></app-control-messages>
+    </mat-error>
+</div>

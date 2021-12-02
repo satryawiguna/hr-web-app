@@ -1,0 +1,407 @@
+<div class="employee-modal-background">
+  <div class="modal-body">
+    <form [formGroup]="form" ngxsForm="{{'formState.'+componentName}}">
+      <div class="modal-top">
+        <h2 class="modal-title">Add {{componentName | titlecase}}</h2>
+        <button mat-icon-button (click)="cancel()" type="button" class="btn-close">
+          <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+        </button>
+      </div>
+      <mat-progress-bar mode="indeterminate" *ngIf="isSubmitted"></mat-progress-bar>
+
+      <div class="modal-form">
+        <mat-tab-group mat-align-tabs="center" [selectedIndex]="selectedTab.value"
+          (selectedIndexChange)="selectedTab.setValue($event)">
+          <mat-tab label="Information">
+            <p class="title">Personal</p>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <div fxLayout="column" fxLayoutGap="24px">
+                  <app-input-text name="nip" [formName]="form" label='NIP' ignore-label-case></app-input-text>
+                  <app-input-text name="full_name" [formName]="form" label='full name'></app-input-text>
+                </div>
+              </div>
+              <div fxFlex="50">
+                <app-upload-image name="media_libraries" [formName]="form" label="profile" type="image"
+                  collection="employee" multiple=false></app-upload-image>
+                <mat-error>
+                  <app-control-messages [control]="form.get('media_libraries')"></app-control-messages>
+                </mat-error>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-input-text name="nick_name" [formName]="form" label='nick name'></app-input-text>
+              </div>
+              <div fxFlex="50">
+                <app-select-instant name="marital_status_id" [formName]="form" label="Marital Status"
+                  [options]='options$.maritalStatus$ | async'>
+                </app-select-instant>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="gender_id" [formName]="form" label="gender"
+                  [options]="options$.gender$ | async">
+                </app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-select-instant name="religion_id" [formName]="form" label="religion"
+                  [options]="options$.religion$ | async">
+                </app-select-instant>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50" fxLayoutGap="24px">
+                <app-input-text name="birth_place" [formName]="form" label="birth place"></app-input-text>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="birth_date" [formName]="form" label="birth date"></app-input-date>
+              </div>
+            </div>
+            <app-input-text name="address" [formName]="form" label='address' textarea="true" appearance="outline"
+              text-area-min-rows='4'>
+            </app-input-text>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-input-text type="number" name="phone" [formName]="form" label="phone"></app-input-text>
+              </div>
+              <div fxFlex="50">
+                <app-international-phone name="mobile" [formName]="form" label="mobile"></app-international-phone>
+              </div>
+            </div>
+            <app-input-text type="email" name="email" [formName]="form" label="email"></app-input-text>
+            <app-input-text type='number' name="identity_number" [formName]="form" label="ID Number" ignore-label-case>
+            </app-input-text>
+            <app-input-text textarea="true" appearance="outline" name="identity_address" [formName]="form"
+              label="ID address" text-area-min-rows='4'>
+            </app-input-text>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_drive_license_a" [formName]="form" [affectedFields]="checkboxes$.cbHasLicenseA">
+                </app-checkbox>
+              </div>
+              <div fxFlex="48">
+                <app-input-text name="drive_license_a_number" [formName]="form" label="SIM A"></app-input-text>
+              </div>
+              <div fxFlex="48">
+                <app-input-date name="drive_license_a_date" [formName]="form" label="Drive License A Expiration Date"
+                  [min-date]="todayDate" [max-date]="next5YearsDate"></app-input-date>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_drive_license_b" [formName]="form" [affectedFields]="checkboxes$.cbHasLicenseB">
+                </app-checkbox>
+              </div>
+              <div fxFlex="48">
+                <app-input-text name="drive_license_b_number" [formName]="form" label="SIM B"></app-input-text>
+              </div>
+              <div fxFlex="48">
+                <app-input-date name="drive_license_b_date" [formName]="form" label="Drive License B Expiration Date"
+                  [min-date]="todayDate" [max-date]="next5YearsDate"></app-input-date>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_drive_license_c" [formName]="form" [affectedFields]="checkboxes$.cbHasLicenseC">
+                </app-checkbox>
+              </div>
+              <div fxFlex="48">
+                <app-input-text name="drive_license_c_number" [formName]="form" label="SIM C"></app-input-text>
+              </div>
+              <div fxFlex="48">
+                <app-input-date name="drive_license_c_date" [formName]="form" label="Drive License C Expiration Date"
+                  [min-date]="todayDate" [max-date]="next5YearsDate"></app-input-date>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Family" [disabled]='checkMaritalStatus'>
+            <p class="title">Spouse</p>
+            <app-input-text name="mate_full_name" [formName]="form" label="spouse fullname"></app-input-text>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-input-text name="mate_nick_name" [formName]="form" label="spouse nickname"></app-input-text>
+              </div>
+              <div fxFlex="50">
+                <app-radio-button name="mate_as" [formName]="form" label="mate as" [options]="options$.mateAs$ | async"
+                  display="row"></app-radio-button>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-input-text name="mate_birth_place" [formName]="form" label="spouse birth place"></app-input-text>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="mate_birth_date" [formName]="form" label="spouse birth date">
+                </app-input-date>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_mate_bpjs_kesehatan" [formName]="form"
+                  [affectedFields]="checkboxes$.cbHasMateBpjsKesehatan">
+                </app-checkbox>
+              </div>
+              <div fxFlex="96">
+                <app-input-text name="mate_bpjs_kesehatan_number" [formName]="form" label="BPJS Kesehatan Number"
+                  ignore-label-case>
+                </app-input-text>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="mate_bpjs_kesehatan_class" [formName]="form" label="BPJS Class"
+                  ignore-label-case [options]='options$.bpjsKesehatanClass$ | async'>
+                </app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="mate_bpjs_kesehatan_date" [formName]="form" label="BPJS Date" ignore-label-case>
+                </app-input-date>
+              </div>
+            </div>
+
+            <p class="title">Children</p>
+            <!-- datatable children -->
+            <app-datatable [columns]="datatableColumns.child" datatable-state='child' (openModal)="multiModal($event)"
+              id="child" hide-export-button hide-filter-button></app-datatable>
+            <app-add-child *ngIf="multiModalControl[0] === 'add-child'" (closeModal)='multiModal($event)'
+              datatable-state='child' local [predefined-form]='childPredefinedForm'>
+            </app-add-child>
+            <app-edit-child *ngIf="multiModalControl[0] === 'edit-child'" [data]="multiModalControl[1]"
+              (closeModal)='multiModal($event)' datatable-state='child' local>
+            </app-edit-child>
+          </mat-tab>
+
+          <mat-tab label="Education">
+            <p class="title">Formal Institution History</p>
+            <!-- datatable -->
+            <app-datatable [columns]="datatableColumns.formalEducationHistory" datatable-state='formal-institution'
+              (openModal)="multiModal($event)" id='formal-institution' hide-export-button hide-filter-button>
+            </app-datatable>
+            <app-add-formal-education-history *ngIf="multiModalControl[0] === 'add-formal-institution'"
+              (closeModal)='multiModal($event)' datatable-state='formal-institution' local
+              [predefined-form]='childPredefinedForm'>
+            </app-add-formal-education-history>
+            <app-edit-formal-education-history [data]="multiModalControl[1]"
+              *ngIf="multiModalControl[0] === 'edit-formal-institution'" (closeModal)='multiModal($event)'
+              datatable-state='formal-institution' local>
+            </app-edit-formal-education-history>
+
+            <p class="title">Non Formal Institution History</p>
+            <!-- datatable -->
+            <app-datatable [columns]="datatableColumns.nonFormalEducationHistory"
+              datatable-state='non-formal-institution' (openModal)="multiModal($event)" id='non-formal-institution'
+              hide-export-button hide-filter-button></app-datatable>
+            <app-add-non-formal-education-history *ngIf="multiModalControl[0] === 'add-non-formal-institution'"
+              (closeModal)='multiModal($event)' datatable-state='non-formal-institution' local
+              [predefined-form]='childPredefinedForm'>
+            </app-add-non-formal-education-history>
+            <app-edit-non-formal-education-history [data]="multiModalControl[1]"
+              *ngIf="multiModalControl[0] === 'edit-non-formal-institution'" (closeModal)='multiModal($event)'
+              datatable-state='non-formal-institution' local>
+            </app-edit-non-formal-education-history>
+
+            <p class="title">Organization History</p>
+            <!-- datatable -->
+            <app-datatable [columns]="datatableColumns.organizationHistory" datatable-state='organization'
+              (openModal)="multiModal($event)" id="organization" hide-export-button hide-filter-button></app-datatable>
+            <app-add-organization-history *ngIf="multiModalControl[0] === 'add-organization'"
+              (closeModal)='multiModal($event)' datatable-state='organization' local
+              [predefined-form]='childPredefinedForm'>
+            </app-add-organization-history>
+            <app-edit-organization-history *ngIf="multiModalControl[0] === 'edit-organization'"
+              [data]="multiModalControl[1]" (closeModal)='multiModal($event)' datatable-state='organization' local>
+            </app-edit-organization-history>
+
+          </mat-tab>
+
+          <mat-tab label="Experience">
+            <p class="title">Work Experience</p>
+            <!-- datatale -->
+            <app-datatable [columns]="datatableColumns.workExperience" datatable-state='work-experience'
+              (openModal)="multiModal($event)" id="work-experience" hide-export-button hide-filter-button>
+            </app-datatable>
+            <app-add-work-experience *ngIf="multiModalControl[0] === 'add-work-experience'"
+              (closeModal)='multiModal($event)' datatable-state='work-experience' local
+              [predefined-form]='childPredefinedForm'>
+            </app-add-work-experience>
+            <app-edit-work-experience *ngIf="multiModalControl[0] === 'edit-work-experience'"
+              [data]="multiModalControl[1]" (closeModal)='multiModal($event)' datatable-state='work-experience' local>
+            </app-edit-work-experience>
+
+            <p class="title">Work Competence</p>
+            <!-- datatable -->
+            <app-datatable [columns]="datatableColumns.workCompetence" datatable-state='work-competence'
+              (openModal)="multiModal($event)" id="work-competence" hide-export-button hide-filter-button>
+            </app-datatable>
+            <app-add-work-competence *ngIf="multiModalControl[0] === 'add-work-competence'"
+              (closeModal)='multiModal($event)' datatable-state='work-competence' local
+              [predefined-form]='childPredefinedForm'>
+            </app-add-work-competence>
+            <app-edit-work-competence *ngIf="multiModalControl[0] === 'edit-work-competence'"
+              [data]="multiModalControl[1]" (closeModal)='multiModal($event)' datatable-state='work-competence' local>
+            </app-edit-work-competence>
+
+          </mat-tab>
+
+          <mat-tab label="Staffing">
+            <p class="title">NPWP</p>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_npwp" [formName]="form" [affectedFields]="checkboxes$.cbHasNPWP"></app-checkbox>
+              </div>
+              <div fxFlex="96">
+                <app-input-text name="npwp_number" [formName]="form" label="NPWP Number" ignore-label-case>
+                </app-input-text>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="npwp_status" [formName]="form" label="NPWP Status"
+                  [options]="options$.npwpStatus$ | async" ignore-label-case></app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="npwp_date" [formName]="form" label="NPWP Date" ignore-label-case></app-input-date>
+              </div>
+            </div>
+
+            <p class="title">BPJS Ketenagakerjaan</p>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_bpjs_tenaga_kerja" [formName]="form"
+                  [affectedFields]="checkboxes$.cbHasBpjsKerja" ignore-label-case>
+                </app-checkbox>
+              </div>
+              <div fxFlex="96">
+                <app-input-text name="bpjs_tenaga_kerja_number" [formName]="form" label="BPJS Ketenagakerjaan Number"
+                  ignore-label-case>
+                </app-input-text>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="bpjs_tenaga_kerja_class" [formName]="form" label="BPJS Class"
+                  [options]='options$.bpjsTenagaKerjaClass$ | async' ignore-label-case>
+                </app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="bpjs_tenaga_kerja_date" [formName]="form" label="BPJS Date" ignore-label-case>
+                </app-input-date>
+              </div>
+            </div>
+
+            <p class="title">BPJS Kesehatan</p>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div class="checkbox-container" fxFlex="4">
+                <app-checkbox name="has_bpjs_kesehatan" [formName]="form"
+                  [affectedFields]="checkboxes$.cbHasBpjsKesehatan">
+                </app-checkbox>
+              </div>
+              <div fxFlex="96">
+                <app-input-text name="bpjs_kesehatan_number" [formName]="form" label="BPJS Kesehatan Number"
+                  ignore-label-case>
+                </app-input-text>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="bpjs_kesehatan_class" [formName]="form" label="BPJS Class"
+                  [options]='options$.bpjsKesehatanClass$ | async' ignore-label-case>
+                </app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="bpjs_kesehatan_date" [formName]="form" label="BPJS Date" ignore-label-case>
+                </app-input-date>
+              </div>
+            </div>
+
+            <p class="title">DPLK</p>
+            <app-input-text type='number' name="dplk_number" [formName]="form" label="DPLK Number" ignore-label-case>
+            </app-input-text>
+            <app-input-text type='number' name="collective_number" [formName]="form" label="Collective Number">
+            </app-input-text>
+          </mat-tab>
+
+          <mat-tab label="Miscellaneous">
+            <p class="title">Others</p>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div *ngIf="isSuperAdmin" fxFlex="50">
+                <app-select-api name="company_id" [formName]="form" label="company">
+                </app-select-api>
+              </div>
+              <div fxFlex="{{isSuperAdmin?'50':'100'}}">
+                <app-select-instant name="office_id" [formName]="form" label="office"
+                  [options]="options$.office$ | async">
+                </app-select-instant>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="work_area_id" [formName]="form" label="work area"
+                  [options]="options$.workArea$ | async"></app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-input-date name="join_date" [formName]="form" label="join date"></app-input-date>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="work_status" [formName]="form" [options]="options$.workStatus$ | async"
+                  label="work status">
+                </app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-select-instant name="work_type" [formName]="form" [options]="options$.workType$ | async"
+                  label="work type">
+                </app-select-instant>
+              </div>
+            </div>
+
+            <div fxLayout="column" fxLayoutGap="24px">
+              <app-input-text textarea="true" appearance="outline" name="english_ability" [formName]="form"
+                label="english ability" text-area-min-rows='4'></app-input-text>
+              <app-input-text textarea="true" appearance="outline" name="computer_ability" [formName]="form"
+                label="computer ability" text-area-min-rows='4'></app-input-text>
+              <app-input-text textarea="true" appearance="outline" name="other_ability" [formName]="form"
+                label="other ability" text-area-min-rows='4'>
+              </app-input-text>
+            </div>
+
+            <p class="title">Bank</p>
+            <div fxLayout="row" fxLayoutGap="24px">
+              <div fxFlex="50">
+                <app-select-instant name="bank_id" [formName]="form" label="bank name"
+                  [options]="options$.bank$ | async">
+                </app-select-instant>
+              </div>
+              <div fxFlex="50">
+                <app-input-text type="number" name="account_number" [formName]="form" label="bank acc number">
+                </app-input-text>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <div class="modal-action">
+        <button mat-stroked-button color="primary" type="button" [disabled]="isSubmitted"
+          (click)="firstTab ? cancel() : prevTab()">
+          {{firstTab ? 'Cancel' : 'Back'}}
+        </button>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitted"
+          (click)="lastTab ? onSubmit(true) : nextTab()">
+          {{lastTab ? 'Save & Close' : 'Next'}}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!--
+  difference between add & edit is on form header, datatable, form footer
+ -->

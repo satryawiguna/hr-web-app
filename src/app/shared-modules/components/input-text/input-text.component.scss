@@ -1,0 +1,13 @@
+textarea.mat-input-element.cdk-textarea-autosize {
+  line-height: 1.5em;
+}
+
+:host ::ng-deep {
+  .mat-form-field-prefix {
+    margin-right: 10px;
+  }
+
+  .mat-form-field-suffix {
+    margin-left: 10px;
+  }
+}

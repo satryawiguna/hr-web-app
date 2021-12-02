@@ -1,0 +1,17 @@
+<div [formGroup]="formName">
+  <mat-form-field appearance="standard">
+    <mat-label>{{ignoreLabelCase ? (label) : (label | titlecase)}}</mat-label>
+    <input #dateInput matInput readonly [matDatepicker]="picker" formControlName="{{name}}" [min]="minDate"
+      (click)="picker.open()" [max]="maxDate">
+    <div matSuffix style="display: flex;">
+      <button mat-icon-button (click)='clear()' [disabled]='isEmpty'>
+        <mat-icon>{{isEmpty?'':'close'}}</mat-icon>
+      </button>
+      <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+    </div>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error>
+      <app-control-messages [control]="formName.get(name)"></app-control-messages>
+    </mat-error>
+  </mat-form-field>
+</div>

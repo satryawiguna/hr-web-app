@@ -1,0 +1,15 @@
+:host::ng-deep .ng-select .ng-spinner-loader {
+    bottom: -18px;
+}
+
+:host::ng-deep .ng-select .ng-value {
+    margin-top: 7px;
+}
+
+:host::ng-deep .ng-select-container.ng-has-value .ng-spinner-loader {
+    display: none;
+}
+
+.ng-select {
+    padding-bottom: 1em;
+}

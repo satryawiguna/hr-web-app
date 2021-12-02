@@ -1,0 +1,44 @@
+a.menu-item {
+    color: #454545;
+    font-size: 14px;
+  }
+
+.mat-menu-item {
+  max-height: 35px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+
+:host::ng-deep .child {
+  background-color: #0D486C;  
+  color: #ffffff;
+}
+
+:host::ng-deep .childs-child {
+  background-color: #105D8D;  
+  color: #ffffff;
+}
+
+:host::ng-deep .mat-pseudo-checkbox{
+  display: none !important;
+}
+
+:host::ng-deep .mat-expansion-panel-header-title{
+  color: #ffffff;
+}
+:host::ng-deep .sidenav-menu-title{
+  color: #ffffff;
+}
+// :host::ng-deep .mat-list-base .mat-list-item .mat-list-item-content-reverse, .mat-list-base .mat-list-option .mat-list-item-content-reverse {
+//   padding: 0 48px;
+// }
+:host::ng-deep .mat-expansion-panel-body {
+  padding: 0px;
+}
+// :host::ng-deep .mat-expansion-panel-header {
+//   padding: 0 48px;
+// }
+:host::ng-deep .mat-expansion-panel-header.mat-collapsed {
+  background-color: #0D486C;
+}

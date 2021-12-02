@@ -1,0 +1,30 @@
+<mat-sidenav-container (backdropClick)="filter_nav.toggle()">
+
+  <mat-sidenav #filters [autoFocus]="false" position="end" class="filters-container" fxFlex="400px" fxFlex.sm="100%"
+    fxFlex.xs="100%">
+    <app-filter-sidebar [filter]="filter" [filterNav]='filter_nav'>
+      <app-input-text name='query' [formName]='filter' label='Search'></app-input-text>
+      <app-select-instant name='is_active' [formName]='filter' [options]='statusOptions$ | async' label='Status'>
+      </app-select-instant>
+    </app-filter-sidebar>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container">
+      <mat-card class="card-header mat-elevation-z0">
+        <h2>Marital Status List</h2>
+      </mat-card>
+      <mat-card class="card-content mat-elevation-z0">
+        <app-datatable [columns]="columns" [service]="_service" [filter]="filter" [returnUrl]='returnUrl'
+          datatable-state='{{componentName}}' (openModal)="modal($event)" [filterNav]="filter_nav" hide-export-button>
+        </app-datatable>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<app-add-marital-status *ngIf="modalControl[0] === 'add'" (closeModal)='modal($event)'
+  datatable-state='{{componentName}}' hide-export-button>
+</app-add-marital-status>
+<app-edit-marital-status [data]="modalControl[1]" *ngIf="modalControl[0] === 'edit'" (closeModal)='modal($event)'
+  datatable-state='{{componentName}}'>
+</app-edit-marital-status>

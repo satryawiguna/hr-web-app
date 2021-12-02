@@ -1,0 +1,18 @@
+<div [formGroup]="formName">
+  <mat-form-field appearance="standard">
+    <mat-label>{{label | titlecase}}</mat-label>
+    <input matInput readonly placeholder="Choose a date" [satDatepicker]="pickerRange" [formControlName]="name"
+      (click)="pickerRange.open()">
+    <div matSuffix style="display: flex;">
+      <button mat-icon-button (click)='clear()' [disabled]='isEmpty'>
+        <mat-icon>{{isEmpty?'':'close'}}</mat-icon>
+      </button>
+      <sat-datepicker-toggle [for]="pickerRange"></sat-datepicker-toggle>
+    </div>
+    <sat-datepicker #pickerRange [rangeMode]="true">
+    </sat-datepicker>
+    <mat-error>
+      <app-control-messages [control]="formName.get(name)"></app-control-messages>
+    </mat-error>
+  </mat-form-field>
+</div>

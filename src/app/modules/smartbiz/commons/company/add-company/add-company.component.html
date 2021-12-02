@@ -1,0 +1,47 @@
+<div class="modal-background">
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="modal-top">
+        <h2 class="modal-title">Add Company</h2>
+        <button mat-icon-button (click)="cancel()" type="button" class="btn-close">
+          <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+        </button>
+      </div>
+      <mat-progress-bar mode="indeterminate" *ngIf="isSubmitted"></mat-progress-bar>
+
+      <div class="modal-form">
+        <app-select-instant name='company_category_id' [formName]='form' [options]='companyCategoryOptions$ | async'
+          label='Company Category'></app-select-instant>
+        <app-select-instant name='employee_number_scale_id' [formName]='form'
+          [options]='employeeNumberScaleOptions$ | async' label='Employee Number Scale'></app-select-instant>
+        <app-input-text name="name" [formName]="form" label='name'></app-input-text>
+        <div class="slug-container">
+          <app-checkbox name="isRequestSlug" [formName]="form" label=''>
+          </app-checkbox>
+          <app-input-text name="slug" [formName]="form" label='slug'></app-input-text>
+        </div>
+        <app-input-text name="email" [formName]="form" label='email'></app-input-text>
+        <app-input-text name="url" [formName]="form" label='url'></app-input-text>
+        <app-upload-image name="media_libraries" [formName]="form" label="logo" type="image" collection="company">
+        </app-upload-image>
+        <mat-error>
+          <app-control-messages [control]="form.get('media_libraries')"></app-control-messages>
+        </mat-error>
+        <app-input-text name="description" [formName]="form" label='description' textarea='true'>
+        </app-input-text>
+      </div>
+
+      <div class="modal-action">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitted " (click)="onSubmit(true)">
+          Save & Close
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitted " (click)="onSubmit(false)">
+          Save
+        </button>
+        <button mat-stroked-button color="primary" type="button" [disabled]="isSubmitted" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

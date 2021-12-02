@@ -1,0 +1,45 @@
+<div class="modal-background">
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="modal-top">
+        <h2 class="modal-title">Edit {{componentName | titlecase}}</h2>
+        <button mat-icon-button (click)="cancel()" type="button" class="btn-close">
+          <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+        </button>
+      </div>
+      <mat-progress-bar mode="indeterminate" *ngIf="isSubmitted"></mat-progress-bar>
+
+      <div class="modal-form">
+        <app-select-instant name='group_id' [formName]='form' [options]='groupOptions$ | async' label='group'>
+        </app-select-instant>
+        <app-input-text name="name" [formName]="form" label='name'></app-input-text>
+        <div class="slug-container">
+          <app-checkbox name="isRequestSlug" [formName]="form" label=''>
+          </app-checkbox>
+          <app-input-text name="slug" [formName]="form" label='slug'></app-input-text>
+        </div>
+        <app-select-multiple [data]="permissions" name="permission_ids" [formName]="form" label='choose permission'
+          [options]="permissionOptions$ | async" (getControls)="setPermission($event)"></app-select-multiple>
+        <div *ngFor="let formGroup of formPermission; let i = index" fxLayout="column"
+          style="padding: 5px; border: 1px solid #cccccc; margin-bottom: 10px; border-radius: 8px;">
+          <div fxLayout="row" fxLayoutGap="10px">
+            <app-input-text name="data_name" [formName]="formGroup" label='permission'></app-input-text>
+            <app-radio-button name="data_value" [formName]="formGroup" label="permission value"
+              [options]="permissionValueOptions" display="row"></app-radio-button>
+          </div>
+        </div>
+        <app-input-text name="description" [formName]="form" label='description' textarea='true'>
+        </app-input-text>
+      </div>
+
+      <div class="modal-action">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitted " (click)="onSubmit()">
+          Save & Close
+        </button>
+        <button mat-stroked-button color="primary" type="button" [disabled]="isSubmitted" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

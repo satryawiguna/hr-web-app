@@ -1,0 +1,10 @@
+<div [formGroup]="formName">
+    <mat-form-field appearance="standard">
+        <mat-label>{{label | titlecase}}</mat-label>
+        <mat-select formControlName="{{name}}" multiple>
+            <mat-option *ngFor="let item of options" [value]="item.id" (onSelectionChange)="onChangeMultipleSelect($event)">
+                {{item.label || item.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

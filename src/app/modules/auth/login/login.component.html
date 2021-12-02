@@ -1,0 +1,28 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="overlay"></div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <img alt="" src="../../../../assets/logo/SB-logo.png" width="300px" height="150px" />
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p *ngIf="errMessage" style="color :red;">{{errMessage}}</p>
+      <div>
+        <app-input-text name='identity' [formName]='loginForm' label='Username / Email'>
+        </app-input-text>
+        <app-input-password name='password' [formName]='loginForm' label='Password'>
+        </app-input-password>
+        <app-checkbox name='rememberMe' [formName]='loginForm' label='Remember Me'>
+        </app-checkbox>
+
+        <a routerLink="/forget-password">Forget Password</a>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitted">
+        Login
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -1,0 +1,258 @@
+<!-- <button mat-raised-button (click)="isStored = !isStored">content loader toggler</button> -->
+
+<div class="menu">
+  <div class='left-menu'>
+    <mat-accordion style="margin-top: 1px;" *ngIf="!hideBulkButton">
+      <mat-expansion-panel hideToggle="true" class="mat-elevation-z0" [disabled]="!checkAccessRules('delete')">
+        <mat-expansion-panel-header collapsedHeight="30px" expandedHeight="30px">
+          <mat-panel-title>
+            Bulk Action
+          </mat-panel-title>
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </mat-expansion-panel-header>
+        <mat-selection-list>
+          <mat-divider [inset]="true"></mat-divider>
+          <mat-list-option (click)="buttonBulkDelete()">
+            Delete
+          </mat-list-option>
+        </mat-selection-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="content-after" style="margin-left: 130px;" *ngIf="!hideAddButton">
+      <button mat-raised-button color="primary" (click)="open('add'+id)" [disabled]="!checkAccessRules('post')">
+        Add New
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class='right-menu' fxShow fxHide.xs *ngIf="!(hideExportButton && hideFilterButton)">
+    <button mat-raised-button color="disable" [matMenuTriggerFor]="menuExport" *ngIf="!hideExportButton">
+      Export
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+    <button mat-raised-button color="primary" (click)="filterNav.toggle()" *ngIf="!hideFilterButton">
+      Filter
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+  </div>
+</div>
+<div fxHide fxShow.xs fxLayout="row" *ngIf="!(hideExportButton && hideFilterButton)">
+  <button mat-raised-button color="disable" [matMenuTriggerFor]="menuExport" *ngIf="!hideExportButton">
+    Export
+    <mat-icon>open_in_new</mat-icon>
+  </button>
+  <button mat-raised-button color="primary" (click)="filterNav.toggle()" *ngIf="!hideFilterButton">
+    Filter
+    <mat-icon>navigate_next</mat-icon>
+  </button>
+</div>
+<mat-menu #menuExport="matMenu">
+  <button mat-menu-item (click)="buttonExport('pdf')">PDF</button>
+  <button mat-menu-item (click)="buttonExport('excel')">Excel</button>
+</mat-menu>
+
+<div class="container">
+  <div class="table">
+
+    <mat-table [dataSource]="datatable" matSort [matSortActive]="active" [matSortDirection]="direction"
+      style.display="{{isStored?'none':'block'}}">
+
+      <ng-container *ngFor="let item of displayedColumns">
+
+        <ng-container [ngSwitch]="item">
+
+          <!-- Checkbox Column -->
+          <ng-container *ngSwitchCase="'action'" matColumnDef="action" sticky>
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox *ngIf="actionButton.includes('selection')" color="primary"
+                (change)="$event ? checkboxMasterToggle() : null"
+                [checked]="selection.hasValue() && checkboxIsAllSelected()"
+                [indeterminate]="selection.hasValue() && !checkboxIsAllSelected()" [aria-label]="checkboxLabel()">
+              </mat-checkbox>
+              <div style="padding-left: 1em;">
+                Action
+              </div>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              <div class="selection">
+                <ng-container *ngIf="row.id && actionButton.includes('selection')">
+                  <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </ng-container>
+              </div>
+              <div class="action-menu">
+                <ng-container *ngIf="row.id && actionButton.includes('edit')">
+                  <button mat-icon-button aria-label="Edit" class="{{checkAccessRules('put')?'action-edit':''}}"
+                    (click)="checkAccessRules('put') && open('edit'+id+'***'+row.id)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="row.id && actionButton.includes('delete')">
+                  <button mat-icon-button aria-label="Delete" class="{{checkAccessRules('delete')?'action-delete':''}}"
+                    (click)="checkAccessRules('delete') && buttonDelete(row)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="row.id && actionButton.includes('detail')">
+                  <button mat-icon-button aria-label="Detail" class="action-detail" (click)='buttonDetail(row)'>
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </ng-container>
+              </div>
+              <div class="status-btn" *ngIf="row.id && actionButton.includes('status')">
+                <button mat-stroked-button class="{{row.is_active? 'active-btn' : 'nonactive-btn'}}"
+                  (click)="buttonActivation(row)" [disabled]="!checkAccessRules('active')">
+                  <mat-icon>{{row.is_active ? 'done' : 'close'}}</mat-icon>
+                  {{row.is_active ? 'Active' : 'Non Active'}}
+                </button>
+              </div>
+              <div class="history-btn" *ngIf="row.id && actionButton.includes('history')">
+                <button mat-icon-button (click)="open('history'+id+'***'+row.id)">
+                  <mat-icon>access_time</mat-icon>
+                  History
+                </button>
+              </div>
+
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef='name' *ngSwitchCase="'name'">
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-others">
+              {{componentName.split('edit-').join('').split('_').join(' ').split('-').join(' ')+" name" | titlecase}}
+            </mat-header-cell>
+            <mat-cell *matCellDef='let row' class="mat-column-others">{{columns[item](row) || ' - '}}</mat-cell>
+          </ng-container>
+
+          <ng-container [matColumnDef]='item' *ngSwitchDefault>
+            <!-- give "_" to using space in title  -->
+            <mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-others">
+              {{item.split('_id')[0].split('_').join(' ').split('-').join(' ') | titlecase}}
+            </mat-header-cell>
+            <mat-cell *matCellDef='let row' class="mat-column-others">{{columns[item](row)|| ' - '}}</mat-cell>
+          </ng-container>
+        </ng-container>
+
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef='displayedColumns'></mat-header-row>
+      <mat-row *matRowDef='let row; columns: displayedColumns'></mat-row>
+    </mat-table>
+  </div>
+
+  <!-- paginator -->
+  <mat-paginator [length]="length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions"
+    style.display="{{id!=='' || isStored || errorMessage ? 'none' : 'block'}}">
+  </mat-paginator>
+
+  <!-- error message -->
+  <mat-card *ngIf="errorMessage && !isLoadingResults && !hideExportButton && !hideFilterButton" class="mat-elevation-z0"
+    style="display: flex; flex-direction:column;justify-content: center; align-items: center; z-index: 1; margin-top: 0;">
+    <div class="error-message" style="padding-bottom:30px">
+      {{errorMessage}}
+    </div>
+    <button mat-mini-fab id="refresh-btn" (click)="buttonRefreshDatatable()"
+      style="border-color: #cbc9c5; box-shadow: 0 0px rgba(0, 0, 0, 0.12);"
+      *ngIf="errorMessage==='Something went wrong.... Try again later'">
+      <mat-icon style="color: #cbc9c5;">refresh</mat-icon>
+    </button>
+  </mat-card>
+
+  <!-- content loader -->
+  <mat-card style.display="{{isStored ? 'block' : 'none'}}" class="mat-elevation-z0" *ngIf="!id">
+    <!-- loader for screen > 800px -->
+    <content-loader primaryColor='#E2E9F4' width="1400" height="700" fxShow fxHide.xs fxHide.sm>
+
+      <!-- select header column -->
+      <svg:rect x="9" y="2" rx="3" ry="3" width="17" height="17" />
+      <!-- action header column -->
+      <svg:rect x="48" y="2" rx="3" ry="3" width="60" height="17" />
+      <!-- status header column -->
+      <svg:rect x="130" y="2" rx="3" ry="3" width="60" height="17" />
+      <!-- other header column -->
+      <svg:rect x="235" y="2" rx="3" ry="3" width="80" height="17" />
+      <svg:rect x="500" y="2" rx="3" ry="3" width="80" height="17" />
+      <svg:rect x="800" y="2" rx="2" ry="2" width="80" height="17" />
+      <svg:rect x="1100" y="2" rx="2" ry="2" width="80" height="17" />
+
+      <!-- line -->
+      <svg:rect x="0" y="40" rx="3" ry="3" width="1400" height="1" />
+
+      <ng-container *ngFor="let item of dummyData">
+
+        <!-- select column -->
+        <svg:rect x="9" attr.y="{{item.y}}" rx="2" ry="2" width="17" height="17" />
+        <!-- action column -->
+        <svg:rect x="48" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{item.randomWidth > 50 ? '60' : '50'}}"
+          height="17" />
+        <!--
+            action per icon
+          <svg:rect x="48" attr.y="{{item.y}}" rx="2" ry="2" width="17" height="17" />
+          <svg:rect x="75" attr.y="{{item.y}}" rx="2" ry="2" width="17" height="17" />
+          <svg:rect x="102" attr.y="{{item.y}}" rx="2" ry="2" width="17" height="17" /> -->
+
+        <!-- status column -->
+        <svg:rect x="133" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{item.randomWidth > 50 ? '90' : '70'}}"
+          height="17" />
+
+        <!-- other column -->
+        <svg:rect x="235" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{100+item.randomWidth}}" height="17" />
+        <svg:rect x="500" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{150+item.randomWidth}}" height="17" />
+        <svg:rect x="800" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{150+item.randomWidth}}" height="17" />
+        <svg:rect x="1100" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{150+item.randomWidth}}" height="17" />
+
+        <svg:rect x="0" attr.y="{{item.y + 32}}" rx="3" ry="3" width="1400" height="1" />
+
+
+      </ng-container>
+    </content-loader>
+
+    <!-- loader for screen < 800px  row heigh not fixed yet-->
+    <content-loader primaryColor='#E2E9F4' width="800" height="700" fxHide fxShow.xs fxShow.sm
+      style.display="{{isStored ? 'block' : 'none'}}" class="mat-elevation-z0" *ngIf="!id">
+
+      <!-- select header column -->
+      <svg:rect x="9" y="2" rx="3" ry="3" width="17" height="17" />
+      <!-- action header column -->
+      <svg:rect x="48" y="2" rx="3" ry="3" width="60" height="17" />
+      <!-- status header column -->
+      <svg:rect x="130" y="2" rx="3" ry="3" width="60" height="17" />
+      <!-- other header column -->
+      <svg:rect x="235" y="2" rx="3" ry="3" width="80" height="17" />
+      <svg:rect x="500" y="2" rx="3" ry="3" width="80" height="17" />
+
+      <!-- line -->
+      <svg:rect x="0" y="40" rx="3" ry="3" width="800" height="1" />
+
+      <ng-container *ngFor="let item of dummyData">
+
+        <!-- select column -->
+        <svg:rect x="9" attr.y="{{item.y}}" rx="2" ry="2" width="17" height="17" />
+        <!-- action column -->
+        <svg:rect x="48" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{item.randomWidth > 50 ? '60' : '50'}}"
+          height="17" />
+        <svg:rect x="133" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{item.randomWidth > 50 ? '90' : '70'}}"
+          height="17" />
+
+        <!-- other column -->
+        <svg:rect x="235" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{100+item.randomWidth}}" height="17" />
+        <svg:rect x="500" attr.y="{{item.y}}" rx="3" ry="3" attr.width="{{150+item.randomWidth}}" height="17" />
+
+        <svg:rect x="0" attr.y="{{item.y + 32}}" rx="3" ry="3" width="800" height="1" />
+
+
+      </ng-container>
+    </content-loader>
+  </mat-card>
+
+</div>
+<!-- <div class="footer" style.display="{{isLoadingResults?'none':'block'}}">
+  <a mat-raised-button class="footer-btn" *ngIf="returnUrl" [routerLink]="[returnUrl]">
+    <mat-icon>navigate_before</mat-icon>
+    Back
+  </a>
+  <button mat-raised-button class="footer-btn" [disabled]="!selection.hasValue()" color="primary"
+    (click)="buttonBulkDelete()">Bulk
+    Delete</button>
+</div> -->

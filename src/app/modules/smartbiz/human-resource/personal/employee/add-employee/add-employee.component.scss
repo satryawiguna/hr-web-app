@@ -1,0 +1,41 @@
+@use '../../../../../../shared-modules/base/pages/add/add.scss';
+
+:host ::ng-deep {
+  .mat-tab-body-content {
+    padding: 2% 10% 0 10%;
+  }
+  .mat-tab-body.mat-tab-body-active {
+    overflow-y: hidden;
+  }
+}
+
+.title {
+  margin-top: 1%;
+  font-size: 30px;
+  font-family: "Roboto";
+}
+
+:root {
+  --employee-modal-width: 500px;
+  --employee-modal-height: 500px;
+}
+
+button {
+  margin: 5px;
+}
+
+/* MODAL STYLES
+-------------------------------*/
+:host {
+  .modal-body {
+    height: calc(var(--employee-modal-height) + 50px);
+    width: var(--employee-modal-width);
+    .modal-form {
+      height: calc(var(--employee-modal-height) - 150px);
+    }
+  }
+}
+
+.employee-modal-background {
+  @extend .modal-background;
+}

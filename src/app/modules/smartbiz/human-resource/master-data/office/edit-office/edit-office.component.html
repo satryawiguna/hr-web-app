@@ -1,0 +1,43 @@
+<div class="modal-background">
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="modal-top">
+        <h2 class="modal-title">Edit {{componentName | titlecase}}</h2>
+        <button mat-icon-button (click)="cancel()" type="button" class="btn-close">
+          <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
+        </button>
+      </div>
+      <mat-progress-bar mode="indeterminate" *ngIf="isSubmitted"></mat-progress-bar>
+
+      <div class="modal-form">
+        <app-select-api *ngIf='isSuperAdmin' name="company_id" [formName]="form" label='company'>
+        </app-select-api>
+        <app-input-text name="name" [formName]="form" label='name'></app-input-text>
+        <div class="slug-container">
+          <app-checkbox name="isRequestSlug" [formName]="form" label=''>
+          </app-checkbox>
+          <app-input-text name="slug" [formName]="form" label='slug'></app-input-text>
+        </div>
+        <app-select-instant name="type" [formName]="form" label="type" [options]="options$.officeTypeOptions$ | async">
+        </app-select-instant>
+        <app-select-api name="country" [formName]="form" label='country'></app-select-api>
+        <app-input-text name="state_or_province" [formName]="form" label='state / province'></app-input-text>
+        <app-input-text name="city" [formName]="form" label='city'></app-input-text>
+        <app-input-text name="address" [formName]="form" label='address' textarea></app-input-text>
+        <app-input-text name="postcode" [formName]="form" label='postcode'></app-input-text>
+        <app-input-text name="phone" [formName]="form" label='phone'></app-input-text>
+        <app-input-text name="fax" [formName]="form" label='fax'></app-input-text>
+        <app-input-text name="email" [formName]="form" label='email'></app-input-text>
+      </div>
+
+      <div class="modal-action">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitted " (click)="onSubmit()">
+          Save & Close
+        </button>
+        <button mat-stroked-button color="primary" type="button" [disabled]="isSubmitted" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

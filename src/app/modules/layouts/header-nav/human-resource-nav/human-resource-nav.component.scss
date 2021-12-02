@@ -1,0 +1,115 @@
+@media only screen and (min-width: 960px) {
+  /* For mobile phones: */
+  .page-content{
+      margin-top: 0;
+  }
+}
+
+@media only screen and (max-width: 959px) {
+  /* For mobile phones: */
+  .page-content{
+      margin-top: 10vh;
+  }
+}
+
+::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
+  cursor: pointer;
+  /* change what you want */
+  color: rgba(#000000, 0.87),
+}
+
+:host::ng-deep .mat-expansion-panel-header-title{
+  color: #ffffff;
+}
+:host::ng-deep .sidenav {
+  background-color: #002C47;  
+}
+
+:host::ng-deep .mat-expansion-panel-body {
+  padding: 0;
+}
+:host::ng-deep .sidenav-menu {
+  background-color: #002C47;
+}
+// :host::ng-deep .sidenav-menu:hover {
+//   background-color: #0D486C;
+// }
+// :host::ng-deep .sidenav-menu:focus {
+//   background-color: #0D486C;
+// }
+
+:host::ng-deep .sidenav-menu-title{
+  color: #ffffff;
+}
+
+:host::ng-deep .mat-expansion-indicator::after {
+  color: #ffffff;
+}
+
+.header-sidenav {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding: 20px;
+  height: 20vh;
+  background-image: url('../../../../../assets/image/login-bg.jpeg');
+  // opacity: 0.6;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  @import "../../../../../styles.scss";
+  .overlay-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20vh;
+    // background: rgba(0, 27, 68, 0.788);
+    background-color: $primary;
+    opacity: 0.9;
+  }
+
+  .profile-picture {
+    border: 2px solid #FFFFFF;
+    width: 40px;
+    height: 40px;
+    // margin-right: 5px;
+    background-size: cover;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: top center;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.app-inner {
+  height: 100%;
+  // z-index: -1 !important;
+}
+
+.menu-bar{
+  position: sticky;
+  top: 64px;
+  margin-top: 64px;
+  z-index: 2;
+}
+
+.sidenav-mobile{
+  z-index: 5;
+}
+
+.page-content{
+  // margin-top: 10vh;
+  z-index: 0;
+}
+
+a.menu-item {
+  color: #454545;
+  font-size: 14px;
+}
